@@ -1,0 +1,16 @@
+{
+  "name": "sleep",
+  "version": "1.0.0",
+  "description": "Set a timer then continue the next lines of your code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "es6-sleep",
+    "sleep",
+    "promise"
+  ],
+  "author": "jeffery hussin",
+  "license": "MIT"
+}
