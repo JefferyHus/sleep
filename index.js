@@ -1,31 +1,37 @@
 "use strict";
 
-import * as _ from "lodash";
-
 async function sleep (duration) {
     // check if any call back has been sent
     var args = Array.prototype.slice.call(arguments, 1);
-    console.log(_.rest(args));
+    
     if ( args.length && typeof args[ args.length - 1 ] === "function" )
     {
-        _callback = args.prop();
+        _callback = args.pop();
     }
-    else if ( typeof args[ args.length - 1 ] === "string" )
+
+    // if not then check if it is a string
+    args = args.slice(0, 1).map( i => { return i; } );
+    
+    if ( args.length && typeof args[ args.length - 1 ] === "string" )
     {
-        _functionName = args.prop();
+        var _functionName = args.pop();
+
         // create the arguments
-        let argsToArray = _.toArray( args );
+        var argsToArray = Array.prototype.slice.call(arguments).slice(2);
+        
+        // set the function body
+        var fn = window[ _functionName ];
+
+        if ( typeof fn !== "function" )
+            throw new Error("The function: " + _functionName + " does not exist");
+
         // call the function and send arguments
-        window[ _functionName ]( _.rest(argsToArray) ).promise().done(
-            function () {
-                console.log( "fi" );
-            }
-        );
+        return new Promise( (resolve, reject) => window.setTimeout( () => {
+            resolve( fn.apply(null, argsToArray) );
+        }, duration ) );
     }
 
-    console.log(arguments);
-
-    return new Promise( (resolve) => window.setTimeout(() => {
+    return new Promise( (resolve, reject) => window.setTimeout(() => {
         resolve();
     }, duration) );
 }
